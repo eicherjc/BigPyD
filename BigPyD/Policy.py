@@ -6,7 +6,7 @@ class Policy:
     def __init__(self, session):
         self.s = session
 
-        r = session.get(url=session.url + "/api/v1/compliance-rules", headers=session.headers, verify=False)
+        r = session.get(url=session.url + "/api/v1/compliance-rules")
         self.policies = r.json()
 
     def exportPolicies(self, fileName="policies.csv"):
@@ -17,26 +17,6 @@ class Policy:
 
         return print("Policies written to " + os.getcwd() + os.path.sep + fileName)
 
-    def setPolicy(self, name, desc, ptype, query, threshold, owner=""):
-        data = {
-            "name": "{}".format(name),
-            "type": "{}".format(ptype),
-            "description": "{}".format(desc),
-            "owner": "{}".format(owner),
-            "complianceRuleCalc":
-            {
-                "bigidQuery": "{}".format(query),
-                "maxFindings": "{}".format(threshold)
-            },
-            "taskSettings":
-            {
-                "includeObjectsReport": True,
-                "includeLinkToInventory": True
-            },
-            "is_enabled": True,
-            "apps":
-            [],
-            "actions":
-            [],
-            "tpaAdditionalParams": ""
-        }
+    def setPolicy(self, data):
+        r = self.s.post(url=self.s.url + "/api/v1/compliance-rules", json=data)
+        return r.json()
