@@ -6,7 +6,7 @@ This framework allows you to easily in a pythonic way get a valid session with B
 
 ### GetSession
 
-This module allows you to create your session with BigID. It contains just one method, being the `getSession()` method.
+This module allows you to create your session with BigID. It contains just two methods, being the `getSession()` and `getSessionRT()` methods. `getSessionRT()` allows you to supply a refresh token instead of basic auth.
 
 `BigPyD.getSession()` requires three parameters: the URL to the BigID application server, the username, and the password. The ssl parameter is optional and defaults to false.
 
