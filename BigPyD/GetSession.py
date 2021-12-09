@@ -4,6 +4,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def getSession(url, user, password, ssl=False):
+    """Use this method for basic auth, same as you'd login with the web UI
+    (assuming you're not using an SSO)"""
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json"
@@ -22,11 +24,13 @@ def getSession(url, user, password, ssl=False):
     s.url=url
     return s
 
-def getSessionAT(url, AuthToken, ssl=False):
+def getSessionRT(url, RefreshToken, ssl=False):
+    """Use this method when using a refresh token generated from the Access
+    Management page"""
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": "{}".format(AuthToken)
+        "Authorization": "{}".format(RefreshToken)
     }
 
     s = requests.Session()
