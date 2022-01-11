@@ -8,27 +8,29 @@ class Scan:
         self.scanProfiles = r.json()['scanProfiles']
 
     def getProfileDetails(self, scanProfile):
-        return next((profile for profile in self.scanProfiles if profile["name"] == "{}".format(scanProfile)), None)
+        profileDetails = next((profile for profile in self.scanProfiles if profile["name"] == "{}".format(scanProfile)), None)
+
+        if profileDetails == None:
+            raise ValueError("Scan profile does not exist. " \
+            "If you are trying to run a scan profile you just added, " \
+            "try using getScanProfiles to update the scan profiles.")
+
+        else:
+            return profileDetails
 
     def run(self, scanProfile=None):
         if scanProfile == None:
             scanProfile = self.profile
         
-        scanDetails = self.getProfileDetails(scanProfile)
+        profileDetails = self.getProfileDetails(scanProfile)
 
-        if scanDetails == None:
-            raise ValueError("""Scan profile does not exist. 
-                If you are trying to run a scan profile you just added, 
-                try using getScanProfiles to update the scan profiles.""")
+        data = {"scanType":"{}".format(profileDetails['scanType']),
+        "scanProfileName":"{}".format(scanProfile),
+        "scanOrigin":"Invoked by BigPyD"
+        }
 
-        else:
-            data = {"scanType":"{}".format(scanDetails['scanType']),
-            "scanProfileName":"{}".format(scanProfile),
-            "scanOrigin":"Invoked manually"
-            }
-
-            r = self.s.post(url=self.s.url + '/api/v1/scans', json=data)
-            return r.json()
+        r = self.s.post(url=self.s.url + '/api/v1/scans', json=data)
+        return r.json()
 
     def setScan(self, data):
         r = self.s.post(url=self.s.url + "/api/v1/scanProfiles", json=data)
