@@ -90,4 +90,4 @@ For example you could set a new policy using the below code:
 MyPolicyObject.setPolicy(Data)
 ```
 
-Where the `Data` object is a python dictionary that contains all the policy definition JSON data.
+Where the `Data` object is a python dictionary that contains all the policy definition JSON data. 
